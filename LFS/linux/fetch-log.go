@@ -3,7 +3,6 @@ package linux
 import (
 	"bufio"
 	"fmt"
-	"io"
 	"os"
 	"path/filepath"
 	"strings"
@@ -32,68 +31,63 @@ func FetchLogFiles(dir string) ([]LogFile, error) {
 }
 
 // ReadLogFile reads the contents of a log file and prints it line by line.
-func ReadLogFile(filePath string) error {
+
+func ReadFileContent(filePath string) string {
 	file, err := os.Open(filePath)
 	if err != nil {
-		return fmt.Errorf("failed to open file %s: %v", filePath, err)
+		return fmt.Sprintf("Failed to open file %s: %v", filePath, err)
 	}
 	defer file.Close()
 
-	reader := bufio.NewReader(file)
-	fmt.Printf("Contents of %s:\n", filePath)
-	fmt.Println(strings.Repeat("=", 50))
-
-	for {
-		line, err := reader.ReadString('\n')
-		if err != nil && err != io.EOF {
-			return fmt.Errorf("error reading file %s: %v", filePath, err)
-		}
-		if line == "" && err == io.EOF {
-			break
-		}
-		fmt.Print(line)
+	var builder strings.Builder
+	scanner := bufio.NewScanner(file)
+	for scanner.Scan() {
+		builder.WriteString(scanner.Text() + "\n")
 	}
 
-	fmt.Println(strings.Repeat("=", 50))
-	return nil
+	if err := scanner.Err(); err != nil {
+		builder.WriteString(fmt.Sprintf("\nError reading file: %v", err))
+	}
+
+	return builder.String()
 }
 
-func ScanAndReadLogFile(logDir string) {
-	fmt.Printf("Scanning directory: %s\n", logDir)
-
-	// Fetch log files
-	logFiles, err := FetchLogFiles(logDir)
-	if err != nil {
-		fmt.Printf("Error fetching log files: %v\n", err)
-		return
-	}
-
-	if len(logFiles) == 0 {
-		fmt.Println("No log files found.")
-		return
-	}
-
-	// Display available log files
-	fmt.Println("Available log files:")
-	for i, logFile := range logFiles {
-		fmt.Printf("[%d] %s\n", i+1, logFile.Name)
-	}
-
-	// Prompt user to select a log file to read
-	var choice int
-	fmt.Printf("\nEnter the number of the log file to read (1-%d): ", len(logFiles))
-	_, err = fmt.Scan(&choice)
-	if err != nil || choice < 1 || choice > len(logFiles) {
-		fmt.Println("Invalid choice. Exiting.")
-		return
-	}
-
-	selectedFile := logFiles[choice-1]
-	fmt.Printf("You selected: %s\n", selectedFile.Name)
-
-	// Read the selected log file
-	err = ReadLogFile(selectedFile.Path)
-	if err != nil {
-		fmt.Printf("Error reading log file: %v\n", err)
-	}
-}
+//func ScanAndReadLogFile(logDir string) {
+//	fmt.Printf("Scanning directory: %s\n", logDir)
+//
+//	// Fetch log files
+//	logFiles, err := FetchLogFiles(logDir)
+//	if err != nil {
+//		fmt.Printf("Error fetching log files: %v\n", err)
+//		return
+//	}
+//
+//	if len(logFiles) == 0 {
+//		fmt.Println("No log files found.")
+//		return
+//	}
+//
+//	// Display available log files
+//	fmt.Println("Available log files:")
+//	for i, logFile := range logFiles {
+//		fmt.Printf("[%d] %s\n", i+1, logFile.Name)
+//	}
+//
+//	// Prompt user to select a log file to read
+//	var choice int
+//	fmt.Printf("\nEnter the number of the log file to read (1-%d): ", len(logFiles))
+//	_, err = fmt.Scan(&choice)
+//	if err != nil || choice < 1 || choice > len(logFiles) {
+//		fmt.Println("Invalid choice. Exiting.")
+//		return
+//	}
+//
+//	selectedFile := logFiles[choice-1]
+//	fmt.Printf("You selected: %s\n", selectedFile.Name)
+//
+//	// Read the selected log file
+//	//err = ReadFileContent(selectedFile.Path)
+//	if err != nil {
+//		fmt.Printf("Error reading log file: %v\n", err)
+//	}
+//}
