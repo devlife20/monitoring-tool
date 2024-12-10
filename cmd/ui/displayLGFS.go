@@ -1,7 +1,6 @@
 package ui
 
 import (
-	"bufio"
 	"fmt"
 	"github.com/devlife20/monitoring-tool/LFS/linux"
 	"io"
@@ -19,7 +18,7 @@ const (
 )
 
 var (
-	titleStyle        = lipgloss.NewStyle().MarginLeft(2)
+	titleStyle        = lipgloss.NewStyle().MarginLeft(2).Background(lipgloss.Color("5")).Bold(true)
 	itemStyle         = lipgloss.NewStyle().PaddingLeft(4)
 	selectedItemStyle = lipgloss.NewStyle().PaddingLeft(2).Foreground(lipgloss.Color("170"))
 	paginationStyle   = list.DefaultStyles().PaginationStyle.PaddingLeft(4)
@@ -32,6 +31,7 @@ type state int
 const (
 	listState state = iota
 	viewState
+	confirmState
 )
 
 type item string
@@ -62,10 +62,11 @@ func (d itemDelegate) Render(w io.Writer, m list.Model, index int, listItem list
 }
 
 type model struct {
-	state    state
-	list     list.Model
-	logFiles []linux.LogFile
-	content  string
+	state       state
+	list        list.Model
+	logFiles    []linux.LogFile
+	content     string
+	showConfirm bool
 }
 
 func (m model) Init() tea.Cmd {
@@ -84,11 +85,30 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		case "q", "ctrl+c":
 			return m, tea.Quit
 
+		case "ctrl+s":
+			m.state = confirmState
+			return m, nil
+
+		case "y":
+			if m.state == confirmState {
+				m.showConfirm = false
+				m.state = listState
+				fmt.Println("LFS source added successfully!")
+			}
+			return m, nil
+
+		case "n":
+			if m.state == confirmState {
+				m.showConfirm = false
+				m.state = listState
+			}
+			return m, nil
+
 		case "enter":
 			if m.state == listState {
 				selectedIndex := m.list.Index()
 				m.state = viewState
-				m.content = readFileContent(m.logFiles[selectedIndex].Path)
+				m.content = linux.ReadFileContent(m.logFiles[selectedIndex].Path)
 			}
 			return m, nil
 
@@ -113,28 +133,12 @@ func (m model) View() string {
 		return "\n" + m.list.View()
 	case viewState:
 		return logContentStyle.Render(m.content)
+	case confirmState:
+		return lipgloss.NewStyle().Margin(2).Padding(2).Bold(true).Render(
+			"Are you sure you want to add LFS source? (y/n)",
+		)
 	}
 	return ""
-}
-
-func readFileContent(filePath string) string {
-	file, err := os.Open(filePath)
-	if err != nil {
-		return fmt.Sprintf("Failed to open file %s: %v", filePath, err)
-	}
-	defer file.Close()
-
-	var builder strings.Builder
-	scanner := bufio.NewScanner(file)
-	for scanner.Scan() {
-		builder.WriteString(scanner.Text() + "\n")
-	}
-
-	if err := scanner.Err(); err != nil {
-		builder.WriteString(fmt.Sprintf("\nError reading file: %v", err))
-	}
-
-	return builder.String()
 }
 
 // Run initializes and starts the Bubble Tea program.
