@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"github.com/devlife20/monitoring-tool/cmd/retrieve"
 	"github.com/devlife20/monitoring-tool/cmd/sources"
 	"os"
 
@@ -33,6 +34,7 @@ func init() {
 	// Cobra supports persistent flags, which, if defined here,
 	// will be global for your application.
 	rootCmd.AddCommand(sources.SourceCmd)
+	rootCmd.AddCommand(retrieve.FetchLogCmd)
 
 	// rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.monitoring-tool.yaml)")
 
