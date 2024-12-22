@@ -8,8 +8,7 @@ import (
 var SourceCmd = &cobra.Command{
 	Use:   "source",
 	Short: "",
-	Long: `The source command group handles the setup and management of log sources, 
-allowing you to configure, list, test, and remove sources for log retrieval`,
+	Long:  ``,
 	Run: func(cmd *cobra.Command, args []string) {
 		err := cmd.Help()
 		if err != nil {
