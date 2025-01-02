@@ -30,7 +30,11 @@ require (
 	github.com/charmbracelet/harmonica v0.2.0 // indirect
 	github.com/charmbracelet/x/ansi v0.4.5 // indirect
 	github.com/charmbracelet/x/term v0.2.1 // indirect
+	github.com/elastic/elastic-transport-go/v8 v8.6.0 // indirect
+	github.com/elastic/go-elasticsearch/v8 v8.17.0 // indirect
 	github.com/erikgeiser/coninput v0.0.0-20211004153227-1c3628e74d0f // indirect
+	github.com/go-logr/logr v1.4.2 // indirect
+	github.com/go-logr/stdr v1.2.2 // indirect
 	github.com/inconshreveable/mousetrap v1.1.0 // indirect
 	github.com/lucasb-eyer/go-colorful v1.2.0 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect
@@ -42,6 +46,9 @@ require (
 	github.com/rivo/uniseg v0.4.7 // indirect
 	github.com/sahilm/fuzzy v0.1.1 // indirect
 	github.com/spf13/pflag v1.0.5 // indirect
+	go.opentelemetry.io/otel v1.28.0 // indirect
+	go.opentelemetry.io/otel/metric v1.28.0 // indirect
+	go.opentelemetry.io/otel/trace v1.28.0 // indirect
 	golang.org/x/sync v0.9.0 // indirect
 	golang.org/x/sys v0.27.0 // indirect
 	golang.org/x/text v0.3.8 // indirect
