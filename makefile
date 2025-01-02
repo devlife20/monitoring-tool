@@ -1,10 +1,13 @@
-.PHONY: build clean test
+.PHONY: build clean test ELK
 
 # Variables
 BINARY_NAME=monit
 SRC_DIR=./main.go
 OUTPUT_DIR=./bin
 
+ELK:
+	cd ELK/ && \
+	go run elasticSrch.go
 
 build:
 	@echo "Building the project..."
@@ -12,12 +15,10 @@ build:
 	@go build -o $(OUTPUT_DIR)/$(BINARY_NAME) $(SRC_DIR)
 	@echo "Build complete: $(OUTPUT_DIR)/$(BINARY_NAME)"
 
-
 test:
 	@echo "Running tests..."
 	@go test ./... -v
 	@echo "All tests passed!"
-
 
 clean:
 	@echo "Cleaning up..."
