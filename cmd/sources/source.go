@@ -17,3 +17,7 @@ var SourceCmd = &cobra.Command{
 
 	},
 }
+
+func init() {
+	SourceCmd.AddCommand(AddCmd)
+}
