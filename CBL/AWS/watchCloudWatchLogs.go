@@ -41,7 +41,7 @@ func fetchAndPrintLogs(ctx context.Context, awsClient cloudwatchlogs.Client, gro
 	return resp.NextForwardToken, nil
 }
 
-func TailCloudWatchLogs(groupName, streamName string, limit int32, region string) {
+func TailCloudWatchLogs(groupName, streamName string, region string) {
 	ctx := context.Background()
 
 	awsClient, err := AwsClient(ctx, region)
