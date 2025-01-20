@@ -15,7 +15,7 @@ var (
 	filterPattern string
 	startTime     string
 	endTime       string
-	limit         int
+	limit         int32
 	region        string
 )
 
@@ -25,7 +25,7 @@ var cloudCmd = &cobra.Command{
 	Long: `Fetch logs from AWS CloudWatch with various filtering options.
    
 Examples:
- monit cloudwatch -g my-log-group -s my-stream -r eu-north-1
+ monit cloudwatch -g my-log-group -s 'my-stream' -r eu-north-1
  monit cloudwatch -g my-log-group -p "ERROR" -r eu-north-1 -l 50 
  monit cloudwatch -g my-log-group -r eu-north-1 --start 2024-12-10T15:00:00Z --end 2024-12-10T16:00:00Z`,
 
@@ -51,7 +51,7 @@ Examples:
 		fmt.Printf("Region: %s\n", region)
 		fmt.Printf("Limit: %d\n", limit)
 
-		AWS.GetCloudWatchLogs(logGroupName, logStreamName, region)
+		AWS.GetCloudWatchLogs(logGroupName, logStreamName, filterPattern, limit, region)
 	},
 }
 
@@ -64,7 +64,7 @@ func init() {
 	cloudCmd.Flags().StringVarP(&region, "region", "r", "", "AWS region for CloudWatch (required)")
 	cloudCmd.Flags().StringVarP(&startTime, "start", "", "", "Start time for logs (RFC3339 format, e.g., 2024-12-10T15:00:00Z)")
 	cloudCmd.Flags().StringVarP(&endTime, "end", "", "", "End time for logs (RFC3339 format, e.g., 2024-12-10T16:00:00Z)")
-	cloudCmd.Flags().IntVarP(&limit, "limit", "l", 100, "Max number of log events to fetch")
+	cloudCmd.Flags().Int32VarP(&limit, "limit", "l", 100, "Max number of log events to fetch")
 
 	// required flags
 	// TODO: Set up a custom logger to redirect stderr to /var/log/monit/error.log.
