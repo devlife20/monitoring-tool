@@ -25,7 +25,7 @@ var watchCloudwatch = &cobra.Command{
 	Examples:
 	monit watch cloudwatch -g my-log-group -s 'my-stream' -r eu-north-1`,
 	Run: func(cmd *cobra.Command, args []string) {
-		AWS.TailCloudWatchLogs(logGroupName, logStreamName, limit, region)
+		AWS.TailCloudWatchLogs(logGroupName, logStreamName, region)
 	},
 }
 
