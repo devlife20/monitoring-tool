@@ -1,8 +1,10 @@
 package cmd
 
 import (
+	"github.com/devlife20/monitoring-tool/cmd/config"
 	"github.com/devlife20/monitoring-tool/cmd/retrieve"
 	"github.com/devlife20/monitoring-tool/cmd/sources"
+	"github.com/devlife20/monitoring-tool/cmd/watchLogs"
 	"os"
 
 	"github.com/spf13/cobra"
@@ -35,6 +37,8 @@ func init() {
 	// will be global for your application.
 	rootCmd.AddCommand(sources.SourceCmd)
 	rootCmd.AddCommand(retrieve.FetchLogCmd)
+	rootCmd.AddCommand(config.MonitConfig)
+	rootCmd.AddCommand(watchLogs.WatchCmd)
 
 	// rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.monitoring-tool.yaml)")
 
