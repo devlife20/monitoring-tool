@@ -7,7 +7,7 @@ OUTPUT_DIR=./bin
 
 ELK:
 	cd ELK/ && \
-	go run elasticSrch.go
+	go run elasticSearch.go
 
 build:
 	@echo "Building the project..."
