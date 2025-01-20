@@ -5,8 +5,11 @@ Copyright © 2025 NAME HERE <EMAIL ADDRESS>
 package retrieve
 
 import (
+	"errors"
 	"fmt"
+	"github.com/devlife20/monitoring-tool/ELK"
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 	"log"
 )
 
@@ -28,14 +31,23 @@ Examples:
   # Fetch logs from a specific time range
   fetch-log elastic --index app-logs --start-time "2025-01-01T00:00:00" --end-time "2025-01-05T23:59:59"
 `,
-	//PreRun: func(cmd *cobra.Command, args []string) {
-	//	// Show help if no flags are set
-	//	if len(args) == 0 && !cmd.Flags().Changed("index") {
-	//		_ = cmd.Help()
-	//		// Exit to prevent further execution
-	//		return
-	//	}
-	//},
+	PreRun: func(cmd *cobra.Command, args []string) {
+		if err := viper.ReadInConfig(); err != nil {
+			var configFileNotFoundError viper.ConfigFileNotFoundError
+			if errors.As(err, &configFileNotFoundError) {
+				// Configuration file not found
+				log.Fatalf(`Configuration file not found.
+Please run the command 'monit config init' to set up the configuration.`)
+			}
+		}
+
+		// Check if elastic_api_key exists
+		apiKey := viper.GetString("elastic_api_key")
+		if apiKey == "" {
+			log.Fatalf("Error: elastic_api_key not found in the configuration. Run 'fetch-log config' to set it.")
+		}
+
+	},
 	Run: func(cmd *cobra.Command, args []string) {
 		// Retrieve the flag values
 		index, _ := cmd.Flags().GetString("index")
@@ -56,8 +68,14 @@ Examples:
 		if startTime != "" || endTime != "" {
 			fmt.Printf("Time Range: %s to %s\n", startTime, endTime)
 		}
-		// Here, implement the actual logic to query Elasticsearch
-		fmt.Println("Logs fetched successfully!")
+
+		err := ELK.FetchLogs(index)
+		if err != nil {
+			fmt.Println("=======", err)
+			return
+		}
+
+		//ELK.UploadSyslogToElasticsearch("/var/log/syslog", "syslog-index")
 	},
 }
 
