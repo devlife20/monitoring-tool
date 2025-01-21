@@ -63,10 +63,12 @@ func SetDefaultConfig() error {
 
 	// Create the config file with default values if it doesn't exist
 	if err := viper.SafeWriteConfig(); err != nil {
-		// Ignore error if config file already exists
-		if _, ok := err.(viper.ConfigFileAlreadyExistsError); !ok {
-			return fmt.Errorf("failed to write default config: %v", err)
+		// Check if the error or any wrapped error is ConfigFileAlreadyExistsError
+		var configFileError viper.ConfigFileAlreadyExistsError
+		if !errors.As(err, &configFileError) {
+			return fmt.Errorf("failed to write default config: %w", err)
 		}
+		// Ignore the error if it's ConfigFileAlreadyExistsError
 	}
 
 	return nil
