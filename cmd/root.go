@@ -35,7 +35,7 @@ func init() {
 	// Here you will define your flags and configuration settings.
 	// Cobra supports persistent flags, which, if defined here,
 	// will be global for your application.
-	rootCmd.AddCommand(sources.SourceCmd)
+	rootCmd.AddCommand(sources.AddSourceCmd)
 	rootCmd.AddCommand(retrieve.FetchLogCmd)
 	rootCmd.AddCommand(config.MonitConfig)
 	rootCmd.AddCommand(watchLogs.WatchCmd)
