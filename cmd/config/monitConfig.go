@@ -4,7 +4,6 @@ Copyright © 2025 NAME HERE <EMAIL ADDRESS>
 package config
 
 import (
-	"fmt"
 	"github.com/spf13/cobra"
 )
 
@@ -15,7 +14,7 @@ var MonitConfig = &cobra.Command{
 	Long: `Manage configuration settings for the monit CLI.
 This includes Elasticsearch credentials and other settings.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("config called")
+		cmd.Help()
 	},
 }
 
