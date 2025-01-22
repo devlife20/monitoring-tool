@@ -9,8 +9,8 @@ import (
 )
 
 // initCmd represents the init command
-var initCmd = &cobra.Command{
-	Use:   "init",
+var conigElastic = &cobra.Command{
+	Use:   "elastic",
 	Short: "Initialize configuration",
 	Long: `Initialize the configuration file with Elasticsearch credentials.
 Creates a config file in ~/.config/monit/config.yaml`,
@@ -20,7 +20,7 @@ Creates a config file in ~/.config/monit/config.yaml`,
 }
 
 func init() {
-	MonitConfig.AddCommand(initCmd)
+	MonitConfig.AddCommand(conigElastic)
 
 	// Here you will define your flags and configuration settings.
 

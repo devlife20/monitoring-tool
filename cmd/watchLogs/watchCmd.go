@@ -10,7 +10,7 @@ import (
 // WatchCmd represents the watch command
 var WatchCmd = &cobra.Command{
 	Use:   "watch",
-	Short: "aggregate logs from different sources in real time or on a scheduled basis",
+	Short: "Continuously stream logs for real-time monitoring.",
 	Long:  ``,
 	Run: func(cmd *cobra.Command, args []string) {
 		if len(args) == 0 {
